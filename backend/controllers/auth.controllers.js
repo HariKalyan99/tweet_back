@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 export const postSignup =  async(request, response) => {
     try {
         const {username, password, fullname, email} = request.body;
-
+console.log(username, password, fullname, email)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!emailRegex.test(email)){
             return response.status(400).json({error: "Invalid email format"})
