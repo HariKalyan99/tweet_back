@@ -1,0 +1,86 @@
+import aliveUsers from "../lib/utils/aliveUsers.js";
+import Auth from "../models/auth.models.js";
+import bcrypt from 'bcryptjs';
+
+export const postSignup =  async(request, response) => {
+    try {
+        const {username, password, fullname, email} = request.body;
+
+        const usernameExists = await Auth.findOne({username});
+
+        if(usernameExists){
+            return response.status(400).json({error: "Username already exists"});
+        }
+
+        const emailExists = await Auth.findOne({email});
+
+        if(emailExists){
+            return response.json({error: "Email is associated with a differnt account"})
+        }
+
+        if(password.length < 6){
+            return response.status(400).json({error: "Password must be atleast 6 characters"})
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const newUser = {
+            username,
+            fullname, 
+            email,
+            password: hashedPassword
+        }
+
+        
+        if(newUser){
+            await newUser.save();
+            return response.status(400).json({
+                username: newUser.username,
+                password: newUser.password,
+                fullname: newUser.fullname,
+                email: newUser.fullname
+            })
+        }else{
+            return response.status(400).json({message: "Can't signup with this details"})
+        }
+
+    } catch (error) {
+        console.log("Error in the postSignup controller", error.message);
+        return response.status(500).json({error: "Internal server issue"})
+    }
+}
+
+
+export const postLogin =  async(request, response) => {
+    try {
+        const {username, password} = request.body;
+        const availableUsers = await aliveUsers();
+        const userExists = availableUsers.find(x => x?.username === username || x?.email === username);
+
+        if(!userExists){
+            return response.status(401).json({error: "Invalid username or email"})
+        }
+
+        const isPasswordCorrect = await bcrypt.compare(password, userExists.password);
+
+        if(!isPasswordCorrect){
+            return response.status(400).json({error: "Password is incorrect"})
+        }
+
+        
+
+
+    } catch (error) {
+        
+    }
+}
+
+
+export const postLogout =  (request, response) => {
+    try {
+        
+    } catch (error) {
+        
+    }
+}
