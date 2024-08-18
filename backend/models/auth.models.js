@@ -23,6 +23,14 @@ const authUserSchema = new mongoose.Schema({
     coverImg: {
         type: String,
         default: ""
+    },
+    bio: {
+        type: String,
+        default: ""
+    }, 
+    link: {
+        type: String,
+        default: ""
     }
 }, {timestamps: true})
 
