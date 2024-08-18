@@ -1,8 +1,11 @@
 import express from "express";
-import { postLogin, postLogout, postSignup } from "../controllers/auth.controllers.js";
+import { getMe, postLogin, postLogout, postSignup } from "../controllers/auth.controllers.js";
+import protectRoute from "../middleware/protectRoute.js";
 
 const router = express.Router();
 
+
+router.get("/me", protectRoute, getMe)
 router.post("/signup", postSignup)
 router.post("/login", postLogin)
 router.post("/logout", postLogout)

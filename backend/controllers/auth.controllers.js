@@ -42,7 +42,7 @@ export const postSignup =  async(request, response) => {
         
         if(newUser){
             await newUser.save();
-            return response.status(200).json({
+            return response.status(201).json({
                 username: newUser.username,
                 password: newUser.password,
                 fullname: newUser.fullname,
@@ -92,8 +92,19 @@ export const postLogin =  async(request, response) => {
 
 export const postLogout =  (request, response) => {
     try {
-        
+        response.cookie("remember_me", "", {maxAge: 0})
+        response.status(200).json({message: "Logged out successfully"})
     } catch (error) {
-        
+        console.log("Error in logout controller", error.message)
+    }
+}
+
+export const getMe = async(request, response) => {
+    try {
+        const user = await Auth.findById(request.user._id).select("-password");
+        return response.status(200).json(user)
+    } catch (error) {
+        console.log("Error in the getMe controller", error.message);
+        return response.status(500).json({error: "Internal server error"})        
     }
 }

@@ -9,11 +9,11 @@ const generateTokenAndSetCookie = (userId, response) => {
         response.cookie("remember_me", token, {
             maxAge: 15*24*60*60*1000,
             httpOnly: true,
-            samesite: "strict",
+            sameSite: "strict",
             secure: process.env.NODE_ENV !== "development"
         })
     } catch (error) {
-        console.log("Error in the generateToken utility function")
+        console.log("Error in the generateToken function")
     }
 }
 
