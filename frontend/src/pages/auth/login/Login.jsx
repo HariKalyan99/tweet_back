@@ -26,7 +26,6 @@ const LoginPage = () => {
 			})
 			const data = await res.json();
 			if(!res.ok) throw new Error(data.error);
-			console.log(data)
 			return data;
 		} catch (error) {
 			console.log(error);
@@ -85,7 +84,7 @@ const LoginPage = () => {
 						/>
 					</label>
 					<button className='btn rounded-full btn-primary text-white'>{isPending ? "Loading..." : "Login"}</button>
-					{isError && <p className='text-red-500'>{error}</p>}
+					{isError && <p className='text-red-500'>{error.message}</p>}
 				</form>
 				<div className='flex flex-col gap-2 mt-4'>
 					<p className='text-white text-lg'>{"Don't"} have an account?</p>
